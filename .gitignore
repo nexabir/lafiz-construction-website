@@ -1,0 +1,28 @@
+# Internal tooling
+.freebuff/
+.freebuff/
+
+# Extracted PDF assets (raw, large — not needed for deployment)
+extracted_assets/
+
+# Inspiration reference screenshots
+Inspariation/
+
+# Company work PDFs and documents (sensitive, large)
+All Company works and Profiles/
+
+# Node artifacts
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

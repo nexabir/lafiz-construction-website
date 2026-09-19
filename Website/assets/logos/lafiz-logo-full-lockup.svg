@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 120" fill="none">
+  <g transform="translate(10, 10)">
+    <!-- Icon -->
+    <g transform="translate(0, 5)">
+      <svg width="48" height="90" viewBox="0 0 100 190" fill="none">
+        <path d="M6 190 V65 L94 0 V62 L39 100 V190 H6Z" fill="#BA1C1D"/>
+        <path d="M56 190 V106 L94 80 V190 H56Z" fill="#BA1C1D"/>
+      </svg>
+    </g>
+    
+    <!-- Typography -->
+    <text x="68" y="55" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-weight="900" font-size="52" fill="#0E1E2B" letter-spacing="1">LAFIZ</text>
+    <text x="70" y="82" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-weight="600" font-size="16.5" fill="#0E1E2B" letter-spacing="0.2">Construction &amp; Consultant</text>
+    
+    <!-- Tagline Divider & Text -->
+    <line x1="410" y1="28" x2="410" y2="82" stroke="#CBD5E1" stroke-width="1.5" />
+    <text x="440" y="60" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-weight="500" font-size="17" fill="#64748B" letter-spacing="0.4">Engineering  •  Construction  •  Consultancy</text>
+  </g>
+</svg>
