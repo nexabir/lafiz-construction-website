@@ -7,11 +7,67 @@
   <meta name="description" content="LAFIZ Construction & Consultant Ltd. is a premier engineering, architectural design, and turnkey construction firm in Bangladesh established in 2011.">
   <link rel="icon" type="image/png" href="assets/logos/favicon-64.png">
 
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LAFIZ Construction & Consultant Ltd. | Engineering, Construction, Consultancy">
+  <meta property="og:description" content="Premier engineering, architectural design, and turnkey construction firm in Bangladesh. 160+ projects delivered across 18 districts since 2011.">
+  <meta property="og:image" content="assets/logos/lafiz-icon-512.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LAFIZ Construction & Consultant Ltd.">
+  <meta name="twitter:description" content="Premier engineering, architectural design, and turnkey construction firm in Bangladesh.">
+  <meta name="twitter:image" content="assets/logos/lafiz-icon-512.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "LAFIZ Construction & Consultant Ltd.",
+    "description": "Premier engineering, architectural design, and turnkey construction firm in Bangladesh established in 2011.",
+    "url": "https://lafiz-consultant.vercel.app",
+    "logo": "assets/logos/lafiz-logo-primary.svg",
+    "telephone": ["+8801718581900", "+8801715508576"],
+    "email": "lafiz.cc@gmail.com",
+    "foundingDate": "2011",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Aziz Mohollah, House #25/5-A (1st Floor), Block-F",
+      "addressLocality": "Mohammadpur, Dhaka",
+      "postalCode": "1207",
+      "addressCountry": "BD"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 23.7737,
+      "longitude": 90.3615
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Bangladesh"
+    },
+    "knowsAbout": ["Engineering Consultancy", "Building Construction", "Renovation & Restoration", "Interior Design", "Structural Engineering", "MEP Engineering"],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "50"
+    }
+  }
+  </script>
+
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" as="style">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
+
+  <!-- Skip to content (accessibility) -->
+  <a href="#hero" class="skip-link">Skip to main content</a>
 
   <!-- ==========================================================================
        HEADER & NAVIGATION
@@ -86,13 +142,13 @@
         </div>
 
         <h1 class="hero-title">
-          Engineering.<br>
-          Construction.<br>
-          <span>Consultancy.</span>
+          Building Bangladesh's
+          <span>Infrastructure</span>
+          Since 2011
         </h1>
 
         <p class="hero-description">
-          Delivering end-to-end technical expertise, architectural design, and turnkey project execution for buildings, critical infrastructure, and industrial developments across Bangladesh.
+          From blueprint to handover — 160+ projects delivered across 18 districts. We are the multidisciplinary engineering partner trusted by government agencies and private developers for buildings, power infrastructure, and critical civil works.
         </p>
 
         <div class="hero-actions">
@@ -164,47 +220,120 @@
         </div>
       </div>
     </div>
+
+    <!-- Trusted By Client Strip -->
+    <div class="container">
+      <div class="hero-trust-strip">
+        <span class="hero-trust-label">Trusted by</span>
+        <div class="hero-trust-logos">
+          <span class="trust-logo-item">PGCB</span>
+          <span class="trust-logo-divider">|</span>
+          <span class="trust-logo-item">Bangladesh Bank</span>
+          <span class="trust-logo-divider">|</span>
+          <span class="trust-logo-item">NHA</span>
+          <span class="trust-logo-divider">|</span>
+          <span class="trust-logo-item">RHD</span>
+          <span class="trust-logo-divider">|</span>
+          <span class="trust-logo-item">Rangpur Cadet College</span>
+          <span class="trust-logo-divider">|</span>
+          <span class="trust-logo-item">RAJUK</span>
+        </div>
+      </div>
+    </div>
     </div>
   </section>
 
   <!-- ==========================================================================
        ABOUT COMPANY SECTION
        ========================================================================== -->
-  <section class="section-services" id="about" style="background-color: var(--bg-light); border-bottom: 1px solid var(--border);">
+  <section class="section-about" id="about">
     <div class="container">
-      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 50px; align-items: center;">
-        <div>
+      <div class="about-grid">
+        <div class="about-text">
           <h2 class="section-title">A Legacy of Engineering Precision in Bangladesh</h2>
-          <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-body); margin-bottom: 20px;">
+          <p class="about-lead">
             <strong>LAFIZ Construction & Consultant Ltd.</strong> is a registered multidisciplinary engineering firm (Dhaka City Corporation Reg. 2011) dedicated to transforming complex engineering visions into resilient, tangible structures.
           </p>
-          <p style="line-height: 1.7; color: var(--text-muted); margin-bottom: 28px;">
+          <p class="about-body">
             In a rapidly urbanizing nation, we champion sustainable construction, earthquake-resilient structural designs (BNBC 2020), and seamless regulatory adherence. From national grid substations for PGCB to modern commercial towers and civic infrastructure, our team delivers excellence from initial sketch to commissioning.
           </p>
-          <div style="display: flex; gap: 32px; flex-wrap: wrap;">
-            <div>
-              <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">100%</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Regulatory Compliance</div>
+          <div class="about-stats">
+            <div class="about-stat">
+              <div class="about-stat-value">100%</div>
+              <div class="about-stat-label">Regulatory Compliance</div>
             </div>
-            <div>
-              <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-dark);">BNBC 2020</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Seismic Design Code</div>
+            <div class="about-stat">
+              <div class="about-stat-value about-stat-value--dark">BNBC 2020</div>
+              <div class="about-stat-label">Seismic Design Code</div>
             </div>
-            <div>
-              <div style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">Turnkey</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Design & Build Capability</div>
+            <div class="about-stat">
+              <div class="about-stat-value">Turnkey</div>
+              <div class="about-stat-label">Design & Build Capability</div>
             </div>
           </div>
         </div>
 
-        <div style="position: relative;">
-          <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-xl);">
-            <img src="assets/projects/pgcb-complex-aricha.jpg?v=5" alt="LAFIZ Major Infrastructure Project" style="width: 100%; height: 380px; object-fit: cover;">
+        <div class="about-image-wrap">
+          <div class="about-image-frame">
+            <img src="assets/projects/pgcb-complex-aricha.jpg?v=5" alt="LAFIZ Major Infrastructure Project" class="about-image">
           </div>
-          <div style="position: absolute; bottom: -20px; right: 20px; background: var(--surface); padding: 18px 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); border-left: 4px solid var(--primary);">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">CORPORATE HEADQUARTERS</div>
-            <div style="font-size: 0.92rem; font-weight: 700; color: var(--text-dark);">Mohammadpur, Dhaka-1207</div>
+          <div class="about-hq-badge">
+            <div class="about-hq-label">CORPORATE HEADQUARTERS</div>
+            <div class="about-hq-address">Mohammadpur, Dhaka-1207</div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       LEADERSHIP TEAM SECTION
+       ========================================================================== -->
+  <section class="section-team" id="team">
+    <div class="container">
+      <div class="section-title-wrap center">
+        <span class="badge-tag">Our Team</span>
+        <h2 class="section-title">Led by Experienced Engineers</h2>
+        <p class="section-subtitle">
+          Our leadership team brings decades of combined experience in structural engineering, architectural design, and construction management across Bangladesh.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card reveal-on-scroll">
+          <div class="team-avatar">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3 class="team-name">Managing Director</h3>
+          <div class="team-role">Engineering & Strategy</div>
+          <p class="team-bio">Oversees the firm's strategic direction and major project portfolios, with extensive experience in government and private sector construction management.</p>
+        </div>
+
+        <div class="team-card reveal-on-scroll">
+          <div class="team-avatar">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3 class="team-name">Chief Structural Engineer</h3>
+          <div class="team-role">Structural Design & Analysis</div>
+          <p class="team-bio">Leads the structural engineering division with expertise in earthquake-resilient design (BNBC 2020), ETABS/SAFE analysis, and high-rise structural systems.</p>
+        </div>
+
+        <div class="team-card reveal-on-scroll">
+          <div class="team-avatar">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3 class="team-name">Head of Architecture</h3>
+          <div class="team-role">Architectural Design & Planning</div>
+          <p class="team-bio">Directs architectural design operations, from conceptual space planning to detailed construction documentation and RAJUK regulatory compliance.</p>
+        </div>
+
+        <div class="team-card reveal-on-scroll">
+          <div class="team-avatar">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3 class="team-name">MEP Engineering Lead</h3>
+          <div class="team-role">Mechanical, Electrical & Plumbing</div>
+          <p class="team-bio">Manages integrated MEP design and coordination for complex building systems, including fire protection, HVAC, and electrical distribution networks.</p>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   initHeader();
+  initActiveNav();
   initStatsCounters();
   renderServices();
   renderCadBlueprints();
@@ -91,6 +92,31 @@ function initHeader() {
 }
 
 /* ==========================================================================
+   ACTIVE NAV STATE (IntersectionObserver)
+   ========================================================================== */
+function initActiveNav() {
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".desktop-nav .nav-link");
+  const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute("id");
+        navLinks.forEach(link => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+        });
+        mobileLinks.forEach(link => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+        });
+      }
+    });
+  }, { threshold: 0.2, rootMargin: "-80px 0px -40% 0px" });
+
+  sections.forEach(section => observer.observe(section));
+}
+
+/* ==========================================================================
    STATS COUNTERS
    ========================================================================== */
 function initStatsCounters() {
@@ -105,6 +131,11 @@ function initStatsCounters() {
           const target = parseInt(num.getAttribute("data-target"), 10);
           const prefix = num.getAttribute("data-prefix") || "";
           const suffix = num.getAttribute("data-suffix") || "";
+          // Skip animating the year — display it statically
+          if (target === 2011) {
+            num.textContent = `${prefix}${target}${suffix}`;
+            return;
+          }
           animateValue(num, 0, target, 1800, prefix, suffix);
         });
       }

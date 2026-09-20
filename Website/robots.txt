@@ -1,0 +1,7 @@
+# LAFIZ Construction & Consultant Ltd.
+# https://lafiz-consultant.vercel.app
+
+User-agent: *
+Allow: /
+
+Sitemap: https://lafiz-consultant.vercel.app/sitemap.xml
