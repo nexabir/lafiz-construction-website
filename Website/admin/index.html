@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>LAFIZ Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================================================
+       ADMIN PANEL STYLES
+       ======================================================================== */
+    :root {
+      --admin-bg: #0f172a;
+      --admin-surface: #1e293b;
+      --admin-surface-2: #334155;
+      --admin-border: #475569;
+      --admin-text: #f1f5f9;
+      --admin-text-muted: #94a3b8;
+      --admin-primary: #3b82f6;
+      --admin-primary-hover: #2563eb;
+      --admin-danger: #ef4444;
+      --admin-success: #22c55e;
+      --admin-warning: #f59e0b;
+      --admin-radius: 8px;
+      --admin-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--admin-bg);
+      color: var(--admin-text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ─────────────────────────────────────────────────── */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--admin-shadow);
+    }
+
+    .login-card h1 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      color: var(--admin-text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 24px;
+    }
+
+    .login-card img {
+      height: 40px;
+      margin-bottom: 20px;
+    }
+
+    /* ── FORM ELEMENTS ────────────────────────────────────────────────── */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--admin-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: var(--admin-radius);
+      color: var(--admin-text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--admin-primary);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ── BUTTONS ──────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--admin-radius);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--admin-primary);
+      color: white;
+      width: 100%;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .btn-primary:hover { background: var(--admin-primary-hover); }
+
+    .btn-save {
+      background: var(--admin-success);
+      color: white;
+    }
+
+    .btn-save:hover { background: #16a34a; }
+
+    .btn-danger {
+      background: var(--admin-danger);
+      color: white;
+    }
+
+    .btn-danger:hover { background: #dc2626; }
+
+    .btn-secondary {
+      background: var(--admin-surface-2);
+      color: var(--admin-text);
+    }
+
+    .btn-secondary:hover { background: var(--admin-border); }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    /* ── DASHBOARD LAYOUT ─────────────────────────────────────────────── */
+    #dashboard-screen {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--admin-surface);
+      border-bottom: 1px solid var(--admin-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header h2 {
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-user {
+      font-size: 0.8rem;
+      color: var(--admin-text-muted);
+    }
+
+    .admin-body {
+      display: flex;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ── SIDEBAR ──────────────────────────────────────────────────────── */
+    .admin-sidebar {
+      width: 240px;
+      background: var(--admin-surface);
+      border-right: 1px solid var(--admin-border);
+      padding: 16px 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section {
+      padding: 8px 16px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--admin-text-muted);
+      margin-top: 16px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      color: var(--admin-text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--admin-text);
+    }
+
+    .sidebar-link.active {
+      background: rgba(59,130,246,0.12);
+      color: var(--admin-primary);
+      border-right: 3px solid var(--admin-primary);
+    }
+
+    .sidebar-icon {
+      width: 18px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    /* ── MAIN CONTENT ─────────────────────────────────────────────────── */
+    .admin-main {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .section-panel {
+      display: none;
+      max-width: 900px;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    .section-panel h3 {
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .section-panel .section-desc {
+      color: var(--admin-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: var(--admin-radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-header h4 {
+      font-size: 1rem;
+    }
+
+    /* ── IMAGE UPLOAD ─────────────────────────────────────────────────── */
+    .image-upload-area {
+      border: 2px dashed var(--admin-border);
+      border-radius: var(--admin-radius);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .image-upload-area:hover {
+      border-color: var(--admin-primary);
+      background: rgba(59,130,246,0.05);
+    }
+
+    .image-upload-area .upload-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .image-upload-area p {
+      color: var(--admin-text-muted);
+      font-size: 0.85rem;
+    }
+
+    .image-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: var(--admin-radius);
+      margin-top: 12px;
+      background: var(--admin-bg);
+    }
+
+    .current-image {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+      background: var(--admin-bg);
+      border-radius: var(--admin-radius);
+      margin-bottom: 12px;
+    }
+
+    .current-image img {
+      height: 60px;
+      width: auto;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    .current-image span {
+      font-size: 0.85rem;
+      color: var(--admin-text-muted);
+    }
+
+    /* ── LIST ITEMS (Projects, Team, etc.) ────────────────────────────── */
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border);
+      border-radius: var(--admin-radius);
+      margin-bottom: 8px;
+    }
+
+    .list-item-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .list-item-info img {
+      height: 40px;
+      width: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .list-item-info .item-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .list-item-info .item-sub {
+      font-size: 0.8rem;
+      color: var(--admin-text-muted);
+    }
+
+    .list-item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── TOAST / NOTIFICATIONS ────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: var(--admin-success);
+      color: white;
+      border-radius: var(--admin-radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--admin-shadow);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.error {
+      background: var(--admin-danger);
+    }
+
+    /* ── MODAL ────────────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 28px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--admin-shadow);
+    }
+
+    .modal h3 {
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* ── LOADING ──────────────────────────────────────────────────────── */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 12px;
+      color: var(--admin-text-muted);
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        width: 60px;
+        overflow: hidden;
+      }
+      .sidebar-link span:not(.sidebar-icon) {
+        display: none;
+      }
+      .sidebar-section { display: none; }
+      .admin-main { padding: 20px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LOADING SCREEN
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="spinner"></div>
+    <span>Loading admin panel...</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LOGIN SCREEN
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="login-screen" style="display:none;">
+    <div class="login-card">
+      <img src="../assets/logos/lafiz-logo-white.svg" alt="LAFIZ" onerror="this.style.display='none'">
+      <h1>Admin Panel</h1>
+      <p>Sign in to manage your website content</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="login-email" placeholder="admin@lafiz.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        <div id="login-error" style="color:var(--admin-danger);font-size:0.85rem;margin-bottom:12px;display:none;"></div>
+        <button type="submit" class="btn btn-primary" id="login-btn">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       DASHBOARD
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="dashboard-screen">
+    <div class="admin-header">
+      <h2>🏗️ LAFIZ Admin</h2>
+      <div class="admin-header-right">
+        <span class="admin-user" id="admin-email"></span>
+        <button class="btn btn-secondary btn-sm" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+    <div class="admin-body">
+      <!-- SIDEBAR -->
+      <nav class="admin-sidebar">
+        <div class="sidebar-section">Content</div>
+        <button class="sidebar-link active" data-section="hero" onclick="showSection('hero', this)">
+          <span class="sidebar-icon">🏠</span><span>Hero Section</span>
+        </button>
+        <button class="sidebar-link" data-section="about" onclick="showSection('about', this)">
+          <span class="sidebar-icon">📋</span><span>About</span>
+        </button>
+        <button class="sidebar-link" data-section="logos" onclick="showSection('logos', this)">
+          <span class="sidebar-icon">🏢</span><span>Client Logos</span>
+        </button>
+        <button class="sidebar-link" data-section="team" onclick="showSection('team', this)">
+          <span class="sidebar-icon">👥</span><span>Team</span>
+        </button>
+        <button class="sidebar-link" data-section="services" onclick="showSection('services', this)">
+          <span class="sidebar-icon">⚙️</span><span>Services</span>
+        </button>
+        <button class="sidebar-link" data-section="cad" onclick="showSection('cad', this)">
+          <span class="sidebar-icon">📐</span><span>CAD Portfolio</span>
+        </button>
+        <button class="sidebar-link" data-section="projects" onclick="showSection('projects', this)">
+          <span class="sidebar-icon">🏗️</span><span>Projects</span>
+        </button>
+        <button class="sidebar-link" data-section="sectors" onclick="showSection('sectors', this)">
+          <span class="sidebar-icon">📊</span><span>Sectors</span>
+        </button>
+        <div class="sidebar-section">Site</div>
+        <button class="sidebar-link" data-section="contact" onclick="showSection('contact', this)">
+          <span class="sidebar-icon">📞</span><span>Contact Info</span>
+        </button>
+        <button class="sidebar-link" data-section="footer" onclick="showSection('footer', this)">
+          <span class="sidebar-icon">📄</span><span>Footer</span>
+        </button>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <div class="admin-main">
+
+        <!-- ── HERO SECTION ──────────────────────────────────────── -->
+        <div class="section-panel active" id="panel-hero">
+          <h3>Hero Section</h3>
+          <p class="section-desc">Edit the main hero banner, tagline, stats, and featured images.</p>
+
+          <div class="card">
+            <h4>Hero Content</h4>
+            <div class="form-group">
+              <label>Tagline (above title)</label>
+              <input type="text" id="hero-tagline" placeholder="ENGINEERING • CONSTRUCTION • CONSULTANCY">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Title Line 1</label>
+                <input type="text" id="hero-title-1" placeholder="Building Bangladesh's">
+              </div>
+              <div class="form-group">
+                <label>Title Line 2</label>
+                <input type="text" id="hero-title-2" placeholder="Infrastructure">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Title Line 3</label>
+              <input type="text" id="hero-title-3" placeholder="Since 2011">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="hero-description" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>CTA Button Text</label>
+                <input type="text" id="hero-cta-text" placeholder="Request a Proposal">
+              </div>
+              <div class="form-group">
+                <label>CTA Button Link</label>
+                <input type="text" id="hero-cta-link" placeholder="#contact">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Stats Bar</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 1 Value</label>
+                <input type="text" id="stat1-value" placeholder="2011">
+              </div>
+              <div class="form-group">
+                <label>Stat 1 Label</label>
+                <input type="text" id="stat1-label" placeholder="Year Established">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 2 Value</label>
+                <input type="text" id="stat2-value" placeholder="41+">
+              </div>
+              <div class="form-group">
+                <label>Stat 2 Label</label>
+                <input type="text" id="stat2-label" placeholder="Technical Personnel">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 3 Value</label>
+                <input type="text" id="stat3-value" placeholder="160+">
+              </div>
+              <div class="form-group">
+                <label>Stat 3 Label</label>
+                <input type="text" id="stat3-label" placeholder="Projects Delivered">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 4 Value</label>
+                <input type="text" id="stat4-value" placeholder="18 Districts">
+              </div>
+              <div class="form-group">
+                <label>Stat 4 Label</label>
+                <input type="text" id="stat4-label" placeholder="Across Bangladesh">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Featured Thumbnails</h4>
+            <div id="hero-thumbnails-container"></div>
+            <button class="btn btn-secondary btn-sm" style="margin-top:12px;" onclick="addHeroThumbnail()">+ Add Thumbnail</button>
+          </div>
+
+          <button class="btn btn-save" onclick="saveSection('hero')">💾 Save Hero Section</button>
+        </div>
+
+        <!-- ── ABOUT SECTION ─────────────────────────────────────── -->
+        <div class="section-panel" id="panel-about">
+          <h3>About Section</h3>
+          <p class="section-desc">Edit the company description, stats, and headquarters info.</p>
+
+          <div class="card">
+            <h4>Content</h4>
+            <div class="form-group">
+              <label>Section Title</label>
+              <input type="text" id="about-title">
+            </div>
+            <div class="form-group">
+              <label>Lead Paragraph</label>
+              <textarea id="about-lead" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Body Paragraph</label>
+              <textarea id="about-body" rows="4"></textarea>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Stats</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 1 Value</label>
+                <input type="text" id="about-stat1-val">
+              </div>
+              <div class="form-group">
+                <label>Stat 1 Label</label>
+                <input type="text" id="about-stat1-label">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 2 Value</label>
+                <input type="text" id="about-stat2-val">
+              </div>
+              <div class="form-group">
+                <label>Stat 2 Label</label>
+                <input type="text" id="about-stat2-label">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Stat 3 Value</label>
+                <input type="text" id="about-stat3-val">
+              </div>
+              <div class="form-group">
+                <label>Stat 3 Label</label>
+                <input type="text" id="about-stat3-label">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Headquarters Image</h4>
+            <div class="current-image" id="about-image-current" style="display:none;">
+              <img id="about-image-preview" src="" alt="">
+              <span id="about-image-name"></span>
+            </div>
+            <div class="image-upload-area" onclick="document.getElementById('about-image-input').click()">
+              <div class="upload-icon">📤</div>
+              <p>Click to upload headquarters image</p>
+              <input type="file" id="about-image-input" accept="image/*" style="display:none" onchange="handleImageUpload(this, 'about-image')">
+            </div>
+          </div>
+
+          <button class="btn btn-save" onclick="saveSection('about')">💾 Save About Section</button>
+        </div>
+
+        <!-- ── CLIENT LOGOS ──────────────────────────────────────── -->
+        <div class="section-panel" id="panel-logos">
+          <h3>Client Logos</h3>
+          <p class="section-desc">Manage the scrolling client logo carousel. Drag to reorder.</p>
+
+          <div class="card">
+            <div id="logos-list"></div>
+            <button class="btn btn-secondary" style="margin-top:12px;" onclick="showAddLogoModal()">+ Add Client Logo</button>
+          </div>
+
+          <button class="btn btn-save" onclick="saveSection('logos')">💾 Save Logos</button>
+        </div>
+
+        <!-- ── TEAM SECTION ──────────────────────────────────────── -->
+        <div class="section-panel" id="panel-team">
+          <h3>Team / Leadership</h3>
+          <p class="section-desc">Manage team members shown in the leadership section.</p>
+
+          <div class="card">
+            <div id="team-list"></div>
+            <button class="btn btn-secondary" style="margin-top:12px;" onclick="showAddTeamModal()">+ Add Team Member</button>
+          </div>
+
+          <button class="btn btn-save" onclick="saveSection('team')">💾 Save Team</button>
+        </div>
+
+        <!-- ── SERVICES ──────────────────────────────────────────── -->
+        <div class="section-panel" id="panel-services">
+          <h3>Services</h3>
+          <p class="section-desc">Edit the four main service categories and their details.</p>
+
+          <div class="card">
+            <div class="form-group">
+              <label>Section Heading</label>
+              <input type="text" id="services-heading">
+            </div>
+            <div class="form-group">
+              <label>Section Description</label>
+              <textarea id="services-desc" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div id="services-list"></div>
+          <button class="btn btn-secondary" style="margin-top:12px;" onclick="showAddServiceModal()">+ Add Service</button>
+
+          <div style="margin-top:16px;">
+            <button class="btn btn-save" onclick="saveSection('services')">💾 Save Services</button>
+          </div>
+        </div>
+
+        <!-- ── CAD PORTFOLIO ─────────────────────────────────────── -->
+        <div class="section-panel" id="panel-cad">
+          <h3>Engineering & CAD Portfolio</h3>
+          <p class="section-desc">Manage CAD/blueprint portfolio items with filter categories.</p>
+
+          <div class="card">
+            <div class="form-group">
+              <label>Section Heading</label>
+              <input type="text" id="cad-heading">
+            </div>
+            <div class="form-group">
+              <label>Section Description</label>
+              <textarea id="cad-desc" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div id="cad-list"></div>
+          <button class="btn btn-secondary" style="margin-top:12px;" onclick="showAddCadModal()">+ Add CAD Item</button>
+
+          <div style="margin-top:16px;">
+            <button class="btn btn-save" onclick="saveSection('cad')">💾 Save CAD Portfolio</button>
+          </div>
+        </div>
+
+        <!-- ── PROJECTS ──────────────────────────────────────────── -->
+        <div class="section-panel" id="panel-projects">
+          <h3>Projects Portfolio</h3>
+          <p class="section-desc">Manage all project entries, images, descriptions, and categories.</p>
+
+          <div class="card">
+            <div class="form-group">
+              <label>Section Heading</label>
+              <input type="text" id="projects-heading">
+            </div>
+            <div class="form-group">
+              <label>Section Description</label>
+              <textarea id="projects-desc" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div id="projects-list"></div>
+          <button class="btn btn-secondary" style="margin-top:12px;" onclick="showAddProjectModal()">+ Add Project</button>
+
+          <div style="margin-top:16px;">
+            <button class="btn btn-save" onclick="saveSection('projects')">💾 Save Projects</button>
+          </div>
+        </div>
+
+        <!-- ── SECTORS ───────────────────────────────────────────── -->
+        <div class="section-panel" id="panel-sectors">
+          <h3>Sectors</h3>
+          <p class="section-desc">Manage sector categories and project counts.</p>
+
+          <div class="card">
+            <div class="form-group">
+              <label>Section Heading</label>
+              <input type="text" id="sectors-heading">
+            </div>
+            <div class="form-group">
+              <label>Section Description</label>
+              <textarea id="sectors-desc" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div id="sectors-list"></div>
+          <button class="btn btn-secondary" style="margin-top:12px;" onclick="showAddSectorModal()">+ Add Sector</button>
+
+          <div style="margin-top:16px;">
+            <button class="btn btn-save" onclick="saveSection('sectors')">💾 Save Sectors</button>
+          </div>
+        </div>
+
+        <!-- ── CONTACT INFO ──────────────────────────────────────── -->
+        <div class="section-panel" id="panel-contact">
+          <h3>Contact Information</h3>
+          <p class="section-desc">Edit phone numbers, email addresses, and office address.</p>
+
+          <div class="card">
+            <h4>Office Address</h4>
+            <div class="form-group">
+              <label>Full Address</label>
+              <textarea id="contact-address" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Phone Numbers</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phone 1</label>
+                <input type="text" id="contact-phone1">
+              </div>
+              <div class="form-group">
+                <label>Phone 2</label>
+                <input type="text" id="contact-phone2">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Email Addresses</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email 1</label>
+                <input type="email" id="contact-email1">
+              </div>
+              <div class="form-group">
+                <label>Email 2</label>
+                <input type="email" id="contact-email2">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Business Details</h4>
+            <div class="form-group">
+              <label>Incorporation No</label>
+              <input type="text" id="contact-incorp">
+            </div>
+            <div class="form-group">
+              <label>Trade License No</label>
+              <input type="text" id="contact-trade">
+            </div>
+            <div class="form-group">
+              <label>TIN Certificate</label>
+              <input type="text" id="contact-tin">
+            </div>
+            <div class="form-group">
+              <label>Working Hours</label>
+              <input type="text" id="contact-hours" placeholder="Sat - Thu: 9:00 AM - 6:00 PM">
+            </div>
+          </div>
+
+          <button class="btn btn-save" onclick="saveSection('contact')">💾 Save Contact Info</button>
+        </div>
+
+        <!-- ── FOOTER ────────────────────────────────────────────── -->
+        <div class="section-panel" id="panel-footer">
+          <h3>Footer</h3>
+          <p class="section-desc">Edit footer description and navigation links.</p>
+
+          <div class="card">
+            <div class="form-group">
+              <label>Footer Description</label>
+              <textarea id="footer-desc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Copyright Text</label>
+              <input type="text" id="footer-copyright">
+            </div>
+          </div>
+
+          <button class="btn btn-save" onclick="saveSection('footer')">💾 Save Footer</button>
+        </div>
+
+      </div><!-- /admin-main -->
+    </div><!-- /admin-body -->
+  </div><!-- /dashboard-screen -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       MODALS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" id="modal-content" onclick="event.stopPropagation()"></div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <!-- App Config -->
+  <script src="../js/firebase-config.js"></script>
+
+  <!-- Admin Logic -->
+  <script>
+    // ========================================================================
+    // STATE
+    // ========================================================================
+    let currentData = {};
+    let pendingUploads = {};
+
+    // ========================================================================
+    // INIT
+    // ========================================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      const inited = initFirebase();
+      if (!inited) {
+        showToast('Firebase not configured. Edit firebase-config.js first.', true);
+        document.getElementById('loading-screen').innerHTML = `
+          <div style="text-align:center;max-width:500px;">
+            <h2>⚠️ Firebase Not Configured</h2>
+            <p style="color:var(--admin-text-muted);margin:16px 0;">Open <code>Website/js/firebase-config.js</code> and replace the placeholder values with your Firebase project credentials.</p>
+            <p style="color:var(--admin-text-muted);font-size:0.85rem;">See the comments in that file for step-by-step instructions.</p>
+          </div>`;
+        return;
+      }
+
+      // Listen for auth state
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          showDashboard(user);
+        } else {
+          showLogin();
+        }
+      });
+    });
+
+    // ========================================================================
+    // AUTH
+    // ========================================================================
+    function showLogin() {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard-screen').style.display = 'none';
+    }
+
+    function showDashboard(user) {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard-screen').style.display = 'block';
+      document.getElementById('admin-email').textContent = user.email;
+      loadAllData();
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn');
+      const errorEl = document.getElementById('login-error');
+
+      btn.innerHTML = '<div class="spinner"></div> Signing in...';
+      btn.disabled = true;
+      errorEl.style.display = 'none';
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+      } finally {
+        btn.innerHTML = 'Sign In';
+        btn.disabled = false;
+      }
+    });
+
+    async function signOut() {
+      await auth.signOut();
+    }
+
+    // ========================================================================
+    // DATA LOADING
+    // ========================================================================
+    async function loadAllData() {
+      try {
+        const doc = await db.collection('siteContent').doc('main').get();
+        if (doc.exists) {
+          currentData = doc.data();
+        } else {
+          // First time — load defaults from the existing HTML
+          currentData = getDefaultData();
+          await db.collection('siteContent').doc('main').set(currentData);
+        }
+        populateAllForms();
+        showToast('Content loaded successfully');
+      } catch (err) {
+        showToast('Error loading data: ' + err.message, true);
+      }
+    }
+
+    function getDefaultData() {
+      return {
+        hero: {
+          tagline: 'ENGINEERING • CONSTRUCTION • CONSULTANCY',
+          title1: "Building Bangladesh's",
+          title2: 'Infrastructure',
+          title3: 'Since 2011',
+          description: "From blueprint to handover — 160+ projects delivered across 18 districts. We are the multidisciplinary engineering partner trusted by government agencies and private developers for buildings, power infrastructure, and critical civil works.",
+          ctaText: 'Request a Proposal',
+          ctaLink: '#contact',
+          stats: [
+            { value: '2011', label: 'Year Established' },
+            { value: '41+', label: 'Technical Personnel' },
+            { value: '160+', label: 'Projects Delivered' },
+            { value: '18 Districts', label: 'Across Bangladesh' }
+          ],
+          thumbnails: []
+        },
+        about: {
+          title: "A Legacy of Engineering Precision in Bangladesh",
+          lead: "LAFIZ Construction & Consultant Ltd. is a registered multidisciplinary engineering firm (Dhaka City Corporation Reg. 2011) dedicated to transforming complex engineering visions into resilient, tangible structures.",
+          body: "In a rapidly urbanizing nation, we champion sustainable construction, earthquake-resilient structural designs (BNBC 2020), and seamless regulatory adherence. From national grid substations for PGCB to modern commercial towers and civic infrastructure, our team delivers excellence from initial sketch to commissioning.",
+          stats: [
+            { value: '100%', label: 'Regulatory Compliance' },
+            { value: 'BNBC 2020', label: 'Seismic Design Code' },
+            { value: 'Turnkey', label: 'Design & Build Capability' }
+          ],
+          imageUrl: ''
+        },
+        logos: [
+          { name: 'PGCB', imageUrl: '../assets/logos/PGCB.png' },
+          { name: 'Bangladesh Bank', imageUrl: '../assets/logos/Bangladesh Bank.png' },
+          { name: 'NHA', imageUrl: '../assets/logos/NHA.png' },
+          { name: 'RHD', imageUrl: '../assets/logos/RHD.jpeg' },
+          { name: 'Rangpur Cadet College', imageUrl: '../assets/logos/Rangpur Cadet College.jpeg' },
+          { name: 'RAJUK', imageUrl: '../assets/logos/RAJUK.jpg' }
+        ],
+        team: [
+          { name: 'Managing Director', role: 'Engineering & Strategy', description: "Oversees the firm's strategic direction and major project portfolios, with extensive experience in government and private sector construction management.", imageUrl: '' },
+          { name: 'Chief Structural Engineer', role: 'Structural Design & Analysis', description: 'Leads the structural engineering division with expertise in earthquake-resilient design (BNBC 2020), ETABS/SAFE analysis, and high-rise structural systems.', imageUrl: '' },
+          { name: 'Head of Architecture', role: 'Architectural Design & Planning', description: 'Directs architectural design operations, from conceptual space planning to detailed construction documentation and RAJUK regulatory compliance.', imageUrl: '' },
+          { name: 'MEP Engineering Lead', role: 'Mechanical, Electrical & Plumbing', description: 'Manages integrated MEP design and coordination for complex building systems, including fire protection, HVAC, and electrical distribution networks.', imageUrl: '' }
+        ],
+        services: {
+          heading: 'Integrated Engineering & Construction Services',
+          description: 'From concept and technical documentation to turnkey project support, LAFIZ brings complete multidisciplinary expertise together under one organization.',
+          items: []
+        },
+        cad: {
+          heading: 'Engineering & CAD Capability',
+          description: 'Precise architectural drawings, structural calculation sheets, MEP layouts, and municipal compliance blueprints developed with in-house CAD & BIM expertise.',
+          items: []
+        },
+        projects: {
+          heading: 'Selected Project Experience',
+          description: 'Explore our completed and active portfolio spanning residential complexes, commercial landmarks, national grid substations, and civil transport infrastructure.',
+          items: []
+        },
+        sectors: {
+          heading: 'Experience Across Critical Built-Environment Sectors',
+          description: 'Proven delivery capacity in specialized technical domains with customized engineering solutions for government and private enterprise.',
+          items: []
+        },
+        contact: {
+          address: 'Aziz Mohollah, House #25/5-A (1st Floor), Block-F, Mohammadpur, Dhaka-1207, Bangladesh',
+          phone1: '+880 1718581900',
+          phone2: '+880 1715508576',
+          email1: 'lafiz.cc@gmail.com',
+          email2: 'lafiz.cc20@gmail.com',
+          incorporation: 'C-6133/691',
+          tradeLicense: '236692 (Dhaka City Corp.)',
+          tin: '190179484974 (Circle-265)',
+          hours: 'Sat - Thu: 9:00 AM - 6:00 PM'
+        },
+        footer: {
+          description: 'LAFIZ Construction & Consultant Ltd. is a licensed engineering consultancy and turnkey civil construction company in Bangladesh, committed to structural integrity, environmental sustainability, and responsible execution since 2011.',
+          copyright: '© 2011 – 2026 LAFIZ Construction & Consultant Ltd. All rights reserved.'
+        }
+      };
+    }
+
+    // ========================================================================
+    // POPULATE FORMS
+    // ========================================================================
+    function populateAllForms() {
+      const h = currentData.hero || {};
+      setVal('hero-tagline', h.tagline);
+      setVal('hero-title-1', h.title1);
+      setVal('hero-title-2', h.title2);
+      setVal('hero-title-3', h.title3);
+      setVal('hero-description', h.description);
+      setVal('hero-cta-text', h.ctaText);
+      setVal('hero-cta-link', h.ctaLink);
+
+      (h.stats || []).forEach((s, i) => {
+        setVal(`stat${i+1}-value`, s.value);
+        setVal(`stat${i+1}-label`, s.label);
+      });
+
+      renderHeroThumbnails();
+
+      const a = currentData.about || {};
+      setVal('about-title', a.title);
+      setVal('about-lead', a.lead);
+      setVal('about-body', a.body);
+      (a.stats || []).forEach((s, i) => {
+        setVal(`about-stat${i+1}-val`, s.value);
+        setVal(`about-stat${i+1}-label`, s.label);
+      });
+
+      renderLogosList();
+      renderTeamList();
+
+      const sv = currentData.services || {};
+      setVal('services-heading', sv.heading);
+      setVal('services-desc', sv.description);
+      renderServicesList();
+
+      const cd = currentData.cad || {};
+      setVal('cad-heading', cd.heading);
+      setVal('cad-desc', cd.description);
+      renderCadList();
+
+      const pr = currentData.projects || {};
+      setVal('projects-heading', pr.heading);
+      setVal('projects-desc', pr.description);
+      renderProjectsList();
+
+      const se = currentData.sectors || {};
+      setVal('sectors-heading', se.heading);
+      setVal('sectors-desc', se.description);
+      renderSectorsList();
+
+      const c = currentData.contact || {};
+      setVal('contact-address', c.address);
+      setVal('contact-phone1', c.phone1);
+      setVal('contact-phone2', c.phone2);
+      setVal('contact-email1', c.email1);
+      setVal('contact-email2', c.email2);
+      setVal('contact-incorp', c.incorporation);
+      setVal('contact-trade', c.tradeLicense);
+      setVal('contact-tin', c.tin);
+      setVal('contact-hours', c.hours);
+
+      const f = currentData.footer || {};
+      setVal('footer-desc', f.description);
+      setVal('footer-copyright', f.copyright);
+    }
+
+    function setVal(id, val) {
+      const el = document.getElementById(id);
+      if (el && val !== undefined) el.value = val;
+    }
+
+    function getVal(id) {
+      const el = document.getElementById(id);
+      return el ? el.value : '';
+    }
+
+    // ========================================================================
+    // SECTION NAVIGATION
+    // ========================================================================
+    function showSection(name, btn) {
+      document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // ========================================================================
+    // SAVE
+    // ========================================================================
+    async function saveSection(section) {
+      // Collect form data into currentData
+      collectSectionData(section);
+
+      try {
+        await db.collection('siteContent').doc('main').set(currentData);
+        showToast('✅ ' + section.charAt(0).toUpperCase() + section.slice(1) + ' section saved!');
+      } catch (err) {
+        showToast('❌ Save failed: ' + err.message, true);
+      }
+    }
+
+    function collectSectionData(section) {
+      switch (section) {
+        case 'hero':
+          currentData.hero.tagline = getVal('hero-tagline');
+          currentData.hero.title1 = getVal('hero-title-1');
+          currentData.hero.title2 = getVal('hero-title-2');
+          currentData.hero.title3 = getVal('hero-title-3');
+          currentData.hero.description = getVal('hero-description');
+          currentData.hero.ctaText = getVal('hero-cta-text');
+          currentData.hero.ctaLink = getVal('hero-cta-link');
+          currentData.hero.stats = [
+            { value: getVal('stat1-value'), label: getVal('stat1-label') },
+            { value: getVal('stat2-value'), label: getVal('stat2-label') },
+            { value: getVal('stat3-value'), label: getVal('stat3-label') },
+            { value: getVal('stat4-value'), label: getVal('stat4-label') }
+          ];
+          break;
+
+        case 'about':
+          currentData.about.title = getVal('about-title');
+          currentData.about.lead = getVal('about-lead');
+          currentData.about.body = getVal('about-body');
+          currentData.about.stats = [
+            { value: getVal('about-stat1-val'), label: getVal('about-stat1-label') },
+            { value: getVal('about-stat2-val'), label: getVal('about-stat2-label') },
+            { value: getVal('about-stat3-val'), label: getVal('about-stat3-label') }
+          ];
+          break;
+
+        case 'contact':
+          currentData.contact = {
+            address: getVal('contact-address'),
+            phone1: getVal('contact-phone1'),
+            phone2: getVal('contact-phone2'),
+            email1: getVal('contact-email1'),
+            email2: getVal('contact-email2'),
+            incorporation: getVal('contact-incorp'),
+            tradeLicense: getVal('contact-trade'),
+            tin: getVal('contact-tin'),
+            hours: getVal('contact-hours')
+          };
+          break;
+
+        case 'footer':
+          currentData.footer = {
+            description: getVal('footer-desc'),
+            copyright: getVal('footer-copyright')
+          };
+          break;
+
+        case 'services':
+          currentData.services.heading = getVal('services-heading');
+          currentData.services.description = getVal('services-desc');
+          break;
+
+        case 'cad':
+          currentData.cad.heading = getVal('cad-heading');
+          currentData.cad.description = getVal('cad-desc');
+          break;
+
+        case 'projects':
+          currentData.projects.heading = getVal('projects-heading');
+          currentData.projects.description = getVal('projects-desc');
+          break;
+
+        case 'sectors':
+          currentData.sectors.heading = getVal('sectors-heading');
+          currentData.sectors.description = getVal('sectors-desc');
+          break;
+      }
+    }
+
+    // ========================================================================
+    // LIST RENDERERS
+    // ========================================================================
+    function renderLogosList() {
+      const container = document.getElementById('logos-list');
+      container.innerHTML = (currentData.logos || []).map((logo, i) => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <img src="${logo.imageUrl}" alt="${logo.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect fill=%22%23334155%22 width=%2240%22 height=%2240%22 rx=%224%22/><text x=%2250%%22 y=%2255%%22 fill=%22%2394a3b8%22 text-anchor=%22middle%22 font-size=%2212%22>L</text></svg>'">
+            <div>
+              <div class="item-title">${logo.name}</div>
+              <div class="item-sub">Logo ${i + 1}</div>
+            </div>
+          </div>
+          <div class="list-item-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editLogo(${i})">✏️ Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="removeLogo(${i})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTeamList() {
+      const container = document.getElementById('team-list');
+      container.innerHTML = (currentData.team || []).map((member, i) => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <img src="${member.imageUrl || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect fill=%22%23334155%22 width=%2240%22 height=%2240%22 rx=%224%22/><text x=%2250%%22 y=%2255%%22 fill=%22%2394a3b8%22 text-anchor=%22middle%22 font-size=%2212%22>👤</text></svg>'}" alt="${member.name}">
+            <div>
+              <div class="item-title">${member.name}</div>
+              <div class="item-sub">${member.role}</div>
+            </div>
+          </div>
+          <div class="list-item-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editTeamMember(${i})">✏️ Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="removeTeamMember(${i})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderServicesList() {
+      const container = document.getElementById('services-list');
+      const items = currentData.services?.items || [];
+      container.innerHTML = items.map((svc, i) => `
+        <div class="card">
+          <div class="card-header">
+            <h4>${svc.title || 'Service ' + (i+1)}</h4>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="editService(${i})">✏️ Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="removeService(${i})">🗑️</button>
+            </div>
+          </div>
+          <p style="color:var(--admin-text-muted);font-size:0.85rem;">${svc.subtitle || ''}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderCadList() {
+      const container = document.getElementById('cad-list');
+      const items = currentData.cad?.items || [];
+      container.innerHTML = items.map((item, i) => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <img src="${item.imageUrl || ''}" alt="${item.title}" onerror="this.style.display='none'">
+            <div>
+              <div class="item-title">${item.title || 'CAD Item ' + (i+1)}</div>
+              <div class="item-sub">${item.category || ''}</div>
+            </div>
+          </div>
+          <div class="list-item-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editCadItem(${i})">✏️ Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="removeCadItem(${i})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderProjectsList() {
+      const container = document.getElementById('projects-list');
+      const items = currentData.projects?.items || [];
+      container.innerHTML = items.map((proj, i) => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <img src="${proj.imageUrl || ''}" alt="${proj.title}" onerror="this.style.display='none'">
+            <div>
+              <div class="item-title">${proj.title || 'Project ' + (i+1)}</div>
+              <div class="item-sub">${proj.category || ''} • ${proj.location || ''}</div>
+            </div>
+          </div>
+          <div class="list-item-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editProject(${i})">✏️ Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="removeProject(${i})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderSectorsList() {
+      const container = document.getElementById('sectors-list');
+      const items = currentData.sectors?.items || [];
+      container.innerHTML = items.map((sec, i) => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <div>
+              <div class="item-title">${sec.name || 'Sector ' + (i+1)}</div>
+              <div class="item-sub">${sec.count || ''} projects • ${sec.description || ''}</div>
+            </div>
+          </div>
+          <div class="list-item-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editSector(${i})">✏️ Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="removeSector(${i})">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderHeroThumbnails() {
+      const container = document.getElementById('hero-thumbnails-container');
+      const thumbs = currentData.hero?.thumbnails || [];
+      container.innerHTML = thumbs.map((t, i) => `
+        <div class="current-image">
+          <img src="${t.imageUrl}" alt="${t.caption}">
+          <span style="flex:1;">${t.caption}</span>
+          <button class="btn btn-danger btn-sm" onclick="removeHeroThumbnail(${i})">🗑️</button>
+        </div>
+      `).join('');
+    }
+
+    // ========================================================================
+    // HERO THUMBNAILS
+    // ========================================================================
+    function addHeroThumbnail() {
+      openModal(`
+        <h3>Add Hero Thumbnail</h3>
+        <div class="form-group">
+          <label>Image</label>
+          <input type="file" id="modal-thumb-file" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label>Caption</label>
+          <input type="text" id="modal-thumb-caption" placeholder="e.g. Featured: 16-Storied NHA Building">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveHeroThumbnail()">Add</button>
+        </div>
+      `);
+    }
+
+    async function saveHeroThumbnail() {
+      const file = document.getElementById('modal-thumb-file').files[0];
+      const caption = document.getElementById('modal-thumb-caption').value;
+      if (!file) { showToast('Please select an image', true); return; }
+
+      const url = await uploadImage(file, 'hero/thumbs/' + Date.now() + '_' + file.name);
+      if (!currentData.hero.thumbnails) currentData.hero.thumbnails = [];
+      currentData.hero.thumbnails.push({ imageUrl: url, caption });
+      renderHeroThumbnails();
+      closeModal();
+      showToast('Thumbnail added');
+    }
+
+    function removeHeroThumbnail(index) {
+      currentData.hero.thumbnails.splice(index, 1);
+      renderHeroThumbnails();
+    }
+
+    // ========================================================================
+    // MODALS FOR ADDING/EDITING ITEMS
+    // ========================================================================
+    function showAddLogoModal() {
+      openModal(`
+        <h3>Add Client Logo</h3>
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" id="modal-logo-name" placeholder="e.g. PGCB">
+        </div>
+        <div class="form-group">
+          <label>Logo Image</label>
+          <input type="file" id="modal-logo-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveNewLogo()">Add Logo</button>
+        </div>
+      `);
+    }
+
+    async function saveNewLogo() {
+      const name = document.getElementById('modal-logo-name').value;
+      const file = document.getElementById('modal-logo-file').files[0];
+      if (!name || !file) { showToast('Fill all fields', true); return; }
+
+      const url = await uploadImage(file, 'logos/' + file.name);
+      currentData.logos.push({ name, imageUrl: url });
+      renderLogosList();
+      closeModal();
+      showToast('Logo added');
+    }
+
+    function editLogo(index) {
+      const logo = currentData.logos[index];
+      openModal(`
+        <h3>Edit Logo: ${logo.name}</h3>
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" id="modal-logo-name" value="${logo.name}">
+        </div>
+        <div class="form-group">
+          <label>New Image (leave empty to keep current)</label>
+          <input type="file" id="modal-logo-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="updateLogo(${index})">Save</button>
+        </div>
+      `);
+    }
+
+    async function updateLogo(index) {
+      const name = document.getElementById('modal-logo-name').value;
+      const file = document.getElementById('modal-logo-file').files[0];
+      currentData.logos[index].name = name;
+      if (file) {
+        currentData.logos[index].imageUrl = await uploadImage(file, 'logos/' + file.name);
+      }
+      renderLogosList();
+      closeModal();
+      showToast('Logo updated');
+    }
+
+    function removeLogo(index) {
+      if (confirm('Remove this logo?')) {
+        currentData.logos.splice(index, 1);
+        renderLogosList();
+      }
+    }
+
+    // ── TEAM ────────────────────────────────────────────────────────────
+    function showAddTeamModal() {
+      openModal(`
+        <h3>Add Team Member</h3>
+        <div class="form-group">
+          <label>Name / Title</label>
+          <input type="text" id="modal-team-name" placeholder="e.g. Engr. Mohammad Rahman">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <input type="text" id="modal-team-role" placeholder="e.g. Managing Director">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-team-desc" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Photo</label>
+          <input type="file" id="modal-team-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveNewTeamMember()">Add Member</button>
+        </div>
+      `);
+    }
+
+    async function saveNewTeamMember() {
+      const name = document.getElementById('modal-team-name').value;
+      const role = document.getElementById('modal-team-role').value;
+      const desc = document.getElementById('modal-team-desc').value;
+      const file = document.getElementById('modal-team-file').files[0];
+      if (!name || !role) { showToast('Name and role required', true); return; }
+
+      let imageUrl = '';
+      if (file) imageUrl = await uploadImage(file, 'team/' + file.name);
+      currentData.team.push({ name, role, description: desc, imageUrl });
+      renderTeamList();
+      closeModal();
+      showToast('Team member added');
+    }
+
+    function editTeamMember(index) {
+      const m = currentData.team[index];
+      openModal(`
+        <h3>Edit: ${m.name}</h3>
+        <div class="form-group">
+          <label>Name / Title</label>
+          <input type="text" id="modal-team-name" value="${m.name}">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <input type="text" id="modal-team-role" value="${m.role}">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-team-desc" rows="3">${m.description || ''}</textarea>
+        </div>
+        <div class="form-group">
+          <label>New Photo (leave empty to keep current)</label>
+          <input type="file" id="modal-team-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="updateTeamMember(${index})">Save</button>
+        </div>
+      `);
+    }
+
+    async function updateTeamMember(index) {
+      const m = currentData.team[index];
+      m.name = document.getElementById('modal-team-name').value;
+      m.role = document.getElementById('modal-team-role').value;
+      m.description = document.getElementById('modal-team-desc').value;
+      const file = document.getElementById('modal-team-file').files[0];
+      if (file) m.imageUrl = await uploadImage(file, 'team/' + file.name);
+      renderTeamList();
+      closeModal();
+      showToast('Team member updated');
+    }
+
+    function removeTeamMember(index) {
+      if (confirm('Remove this team member?')) {
+        currentData.team.splice(index, 1);
+        renderTeamList();
+      }
+    }
+
+    // ── SERVICES ────────────────────────────────────────────────────────
+    function showAddServiceModal() {
+      openModal(`
+        <h3>Add Service</h3>
+        <div class="form-group">
+          <label>Service Title</label>
+          <input type="text" id="modal-svc-title" placeholder="e.g. Engineering Consultancy">
+        </div>
+        <div class="form-group">
+          <label>Subtitle</label>
+          <input type="text" id="modal-svc-subtitle" placeholder="e.g. Architectural, Structural, MEP & Regulatory">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-svc-desc" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Features (one per line)</label>
+          <textarea id="modal-svc-features" rows="4" placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Image</label>
+          <input type="file" id="modal-svc-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveNewService()">Add Service</button>
+        </div>
+      `);
+    }
+
+    async function saveNewService() {
+      const title = document.getElementById('modal-svc-title').value;
+      const subtitle = document.getElementById('modal-svc-subtitle').value;
+      const desc = document.getElementById('modal-svc-desc').value;
+      const features = document.getElementById('modal-svc-features').value.split('\n').filter(f => f.trim());
+      const file = document.getElementById('modal-svc-file').files[0];
+      if (!title) { showToast('Title required', true); return; }
+
+      let imageUrl = '';
+      if (file) imageUrl = await uploadImage(file, 'services/' + file.name);
+      if (!currentData.services.items) currentData.services.items = [];
+      currentData.services.items.push({ title, subtitle, description: desc, features, imageUrl });
+      renderServicesList();
+      closeModal();
+      showToast('Service added');
+    }
+
+    function editService(index) {
+      const s = currentData.services.items[index];
+      openModal(`
+        <h3>Edit: ${s.title}</h3>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="modal-svc-title" value="${s.title}">
+        </div>
+        <div class="form-group">
+          <label>Subtitle</label>
+          <input type="text" id="modal-svc-subtitle" value="${s.subtitle || ''}">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-svc-desc" rows="3">${s.description || ''}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Features (one per line)</label>
+          <textarea id="modal-svc-features" rows="4">${(s.features || []).join('\n')}</textarea>
+        </div>
+        <div class="form-group">
+          <label>New Image (leave empty to keep current)</label>
+          <input type="file" id="modal-svc-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="updateService(${index})">Save</button>
+        </div>
+      `);
+    }
+
+    async function updateService(index) {
+      const s = currentData.services.items[index];
+      s.title = document.getElementById('modal-svc-title').value;
+      s.subtitle = document.getElementById('modal-svc-subtitle').value;
+      s.description = document.getElementById('modal-svc-desc').value;
+      s.features = document.getElementById('modal-svc-features').value.split('\n').filter(f => f.trim());
+      const file = document.getElementById('modal-svc-file').files[0];
+      if (file) s.imageUrl = await uploadImage(file, 'services/' + file.name);
+      renderServicesList();
+      closeModal();
+      showToast('Service updated');
+    }
+
+    function removeService(index) {
+      if (confirm('Remove this service?')) {
+        currentData.services.items.splice(index, 1);
+        renderServicesList();
+      }
+    }
+
+    // ── CAD ITEMS ───────────────────────────────────────────────────────
+    function showAddCadModal() {
+      openModal(`
+        <h3>Add CAD Item</h3>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="modal-cad-title" placeholder="e.g. Multi-Storey Architectural Floor Plan">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="modal-cad-category">
+              <option>Architectural</option><option>Structural</option><option>Construction</option>
+              <option>Masterplan</option><option>Civil & Site</option><option>Infrastructure</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sheet Label</label>
+            <input type="text" id="modal-cad-sheet" placeholder="e.g. Sheet A-01 | Scale 1:100">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-cad-desc" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Project Name</label>
+          <input type="text" id="modal-cad-project" placeholder="e.g. Rajuk Residential Tower">
+        </div>
+        <div class="form-group">
+          <label>Image</label>
+          <input type="file" id="modal-cad-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveNewCadItem()">Add Item</button>
+        </div>
+      `);
+    }
+
+    async function saveNewCadItem() {
+      const title = document.getElementById('modal-cad-title').value;
+      const category = document.getElementById('modal-cad-category').value;
+      const sheet = document.getElementById('modal-cad-sheet').value;
+      const desc = document.getElementById('modal-cad-desc').value;
+      const project = document.getElementById('modal-cad-project').value;
+      const file = document.getElementById('modal-cad-file').files[0];
+      if (!title) { showToast('Title required', true); return; }
+
+      let imageUrl = '';
+      if (file) imageUrl = await uploadImage(file, 'cad/' + file.name);
+      if (!currentData.cad.items) currentData.cad.items = [];
+      currentData.cad.items.push({ title, category, sheetLabel: sheet, description: desc, projectName: project, imageUrl });
+      renderCadList();
+      closeModal();
+      showToast('CAD item added');
+    }
+
+    function editCadItem(index) {
+      const item = currentData.cad.items[index];
+      openModal(`
+        <h3>Edit: ${item.title}</h3>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="modal-cad-title" value="${item.title}">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="modal-cad-category">
+              ${['Architectural','Structural','Construction','Masterplan','Civil & Site','Infrastructure'].map(c =>
+                `<option ${c === item.category ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sheet Label</label>
+            <input type="text" id="modal-cad-sheet" value="${item.sheetLabel || ''}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-cad-desc" rows="3">${item.description || ''}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Project Name</label>
+          <input type="text" id="modal-cad-project" value="${item.projectName || ''}">
+        </div>
+        <div class="form-group">
+          <label>New Image (leave empty to keep current)</label>
+          <input type="file" id="modal-cad-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="updateCadItem(${index})">Save</button>
+        </div>
+      `);
+    }
+
+    async function updateCadItem(index) {
+      const item = currentData.cad.items[index];
+      item.title = document.getElementById('modal-cad-title').value;
+      item.category = document.getElementById('modal-cad-category').value;
+      item.sheetLabel = document.getElementById('modal-cad-sheet').value;
+      item.description = document.getElementById('modal-cad-desc').value;
+      item.projectName = document.getElementById('modal-cad-project').value;
+      const file = document.getElementById('modal-cad-file').files[0];
+      if (file) item.imageUrl = await uploadImage(file, 'cad/' + file.name);
+      renderCadList();
+      closeModal();
+      showToast('CAD item updated');
+    }
+
+    function removeCadItem(index) {
+      if (confirm('Remove this CAD item?')) {
+        currentData.cad.items.splice(index, 1);
+        renderCadList();
+      }
+    }
+
+    // ── PROJECTS ────────────────────────────────────────────────────────
+    function showAddProjectModal() {
+      openModal(`
+        <h3>Add Project</h3>
+        <div class="form-group">
+          <label>Project Title</label>
+          <input type="text" id="modal-proj-title" placeholder="e.g. 16-Storied Building at NHA Mohammadpur">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="modal-proj-category">
+              <option>Residential</option><option>Commercial</option><option>Institutional</option>
+              <option>Industrial</option><option>Infrastructure</option><option>Transportation</option>
+              <option>Power & Energy</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="modal-proj-location" placeholder="e.g. Mohammadpur, Dhaka">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-proj-desc" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year</label>
+            <input type="text" id="modal-proj-year" placeholder="e.g. 2014 - 2018">
+          </div>
+          <div class="form-group">
+            <label>Client</label>
+            <input type="text" id="modal-proj-client" placeholder="e.g. National Housing Authority">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Image</label>
+          <input type="file" id="modal-proj-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveNewProject()">Add Project</button>
+        </div>
+      `);
+    }
+
+    async function saveNewProject() {
+      const title = document.getElementById('modal-proj-title').value;
+      const category = document.getElementById('modal-proj-category').value;
+      const location = document.getElementById('modal-proj-location').value;
+      const desc = document.getElementById('modal-proj-desc').value;
+      const year = document.getElementById('modal-proj-year').value;
+      const client = document.getElementById('modal-proj-client').value;
+      const file = document.getElementById('modal-proj-file').files[0];
+      if (!title) { showToast('Title required', true); return; }
+
+      let imageUrl = '';
+      if (file) imageUrl = await uploadImage(file, 'projects/' + file.name);
+      if (!currentData.projects.items) currentData.projects.items = [];
+      currentData.projects.items.push({ title, category, location, description: desc, year, client, imageUrl });
+      renderProjectsList();
+      closeModal();
+      showToast('Project added');
+    }
+
+    function editProject(index) {
+      const p = currentData.projects.items[index];
+      openModal(`
+        <h3>Edit: ${p.title}</h3>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="modal-proj-title" value="${p.title}">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="modal-proj-category">
+              ${['Residential','Commercial','Institutional','Industrial','Infrastructure','Transportation','Power & Energy'].map(c =>
+                `<option ${c === p.category ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="modal-proj-location" value="${p.location || ''}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-proj-desc" rows="3">${p.description || ''}</textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year</label>
+            <input type="text" id="modal-proj-year" value="${p.year || ''}">
+          </div>
+          <div class="form-group">
+            <label>Client</label>
+            <input type="text" id="modal-proj-client" value="${p.client || ''}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>New Image (leave empty to keep current)</label>
+          <input type="file" id="modal-proj-file" accept="image/*">
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="updateProject(${index})">Save</button>
+        </div>
+      `);
+    }
+
+    async function updateProject(index) {
+      const p = currentData.projects.items[index];
+      p.title = document.getElementById('modal-proj-title').value;
+      p.category = document.getElementById('modal-proj-category').value;
+      p.location = document.getElementById('modal-proj-location').value;
+      p.description = document.getElementById('modal-proj-desc').value;
+      p.year = document.getElementById('modal-proj-year').value;
+      p.client = document.getElementById('modal-proj-client').value;
+      const file = document.getElementById('modal-proj-file').files[0];
+      if (file) p.imageUrl = await uploadImage(file, 'projects/' + file.name);
+      renderProjectsList();
+      closeModal();
+      showToast('Project updated');
+    }
+
+    function removeProject(index) {
+      if (confirm('Remove this project?')) {
+        currentData.projects.items.splice(index, 1);
+        renderProjectsList();
+      }
+    }
+
+    // ── SECTORS ─────────────────────────────────────────────────────────
+    function showAddSectorModal() {
+      openModal(`
+        <h3>Add Sector</h3>
+        <div class="form-group">
+          <label>Sector Name</label>
+          <input type="text" id="modal-sec-name" placeholder="e.g. Residential">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project Count</label>
+            <input type="text" id="modal-sec-count" placeholder="e.g. 45+ Projects">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-sec-desc" rows="2"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="saveNewSector()">Add Sector</button>
+        </div>
+      `);
+    }
+
+    function saveNewSector() {
+      const name = document.getElementById('modal-sec-name').value;
+      const count = document.getElementById('modal-sec-count').value;
+      const desc = document.getElementById('modal-sec-desc').value;
+      if (!name) { showToast('Name required', true); return; }
+
+      if (!currentData.sectors.items) currentData.sectors.items = [];
+      currentData.sectors.items.push({ name, count, description: desc });
+      renderSectorsList();
+      closeModal();
+      showToast('Sector added');
+    }
+
+    function editSector(index) {
+      const s = currentData.sectors.items[index];
+      openModal(`
+        <h3>Edit: ${s.name}</h3>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="modal-sec-name" value="${s.name}">
+        </div>
+        <div class="form-group">
+          <label>Project Count</label>
+          <input type="text" id="modal-sec-count" value="${s.count || ''}">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="modal-sec-desc" rows="2">${s.description || ''}</textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" style="width:auto;" onclick="updateSector(${index})">Save</button>
+        </div>
+      `);
+    }
+
+    function updateSector(index) {
+      const s = currentData.sectors.items[index];
+      s.name = document.getElementById('modal-sec-name').value;
+      s.count = document.getElementById('modal-sec-count').value;
+      s.description = document.getElementById('modal-sec-desc').value;
+      renderSectorsList();
+      closeModal();
+      showToast('Sector updated');
+    }
+
+    function removeSector(index) {
+      if (confirm('Remove this sector?')) {
+        currentData.sectors.items.splice(index, 1);
+        renderSectorsList();
+      }
+    }
+
+    // ========================================================================
+    // IMAGE UPLOAD
+    // ========================================================================
+    async function uploadImage(file, path) {
+      // Try Firebase Storage first
+      try {
+        if (typeof storage !== 'undefined' && storage) {
+          const ref = storage.ref(path);
+          await ref.put(file);
+          return await ref.getDownloadURL();
+        }
+      } catch (err) {
+        console.log('Storage upload failed, using local preview:', err.message);
+      }
+      // Fallback: convert to base64 data URL (stored in Firestore)
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function handleImageUpload(input, targetId) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = document.getElementById(targetId + '-preview');
+        const current = document.getElementById(targetId + '-current');
+        if (preview) preview.src = e.target.result;
+        if (current) current.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ========================================================================
+    // MODAL UTILS
+    // ========================================================================
+    function openModal(html) {
+      document.getElementById('modal-content').innerHTML = html;
+      document.getElementById('modal-overlay').classList.add('show');
+    }
+
+    function closeModal(e) {
+      if (e && e.target !== document.getElementById('modal-overlay')) return;
+      document.getElementById('modal-overlay').classList.remove('show');
+    }
+
+    // ========================================================================
+    // TOAST
+    // ========================================================================
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast' + (isError ? ' error' : '');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
